@@ -1,0 +1,17 @@
+security:
+    enable_authenticator_manager: true
+    password_hashers:
+        App\Application\User\Domain\Entity\User: 'auto'
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Application\User\Domain\Entity\User
+                property: email
+    firewalls:
+        main:
+            custom_authenticators:
+                - App\Domain\User\Security\UserAuthenticator
+            provider: app_user_provider
+
+    access_control:
+        - { path: ^/tasks, roles: ROLE_ADMIN }
