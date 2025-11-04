@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Task\Application\Model;
+namespace App\Application\Task\Application\Model;
 
 use App\Application\Task\Domain\Entity\Task;
 

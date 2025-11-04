@@ -9,8 +9,6 @@ security:
                 property: email
     firewalls:
         main:
-            custom_authenticators:
-                - App\Domain\User\Security\UserAuthenticator
             provider: app_user_provider
 
     access_control:

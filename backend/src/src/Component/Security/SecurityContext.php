@@ -1,46 +1,36 @@
 <?php
-/**
- * UnSpot by UmbrellaIT
- */
-
-
 namespace App\Component\Security;
 
-class SecurityContext
+use Symfony\Component\HttpFoundation\RequestStack;
+
+final class SecurityContext
 {
-    private ?object $userData = null;
+    public function __construct(private readonly RequestStack $requestStack) {}
 
-    public function setUserData(object $userData): void
+    public function setUserData(array $payload): void
     {
-        $this->userData = $userData;
+        $this->requestStack->getCurrentRequest()?->attributes->set('_auth_user', $payload);
     }
 
-    public function getUser(): ?object
+    public function getUser(): ?array
     {
-        return $this->userData;
+        return $this->requestStack->getCurrentRequest()?->attributes->get('_auth_user');
     }
 
-    public function getUserEmail(): ?string
-    {
-        return $this->userData->email ?? null;
-    }
-
-    public function getUserId(): ?int
-    {
-        return $this->userData->user_id ?? null;
-    }
-
-    public function getRoles(): array
-    {
-        return $this->userData->roles ?? [];
-    }
-
+    /**
+     * @param string[] $roles
+     */
     public function isGranted(array $roles): bool
     {
-        if (empty($this->userData)) {
+        $user = $this->getUser();
+        if (!$user) {
             return false;
         }
+        $userRoles = (array)($user['roles'] ?? $user['role'] ?? []);
 
-        return !empty(array_intersect($roles, $this->userData->roles));
+        if (is_string($userRoles)) {
+            $userRoles = [$userRoles];
+        }
+        return !array_diff($roles, $userRoles);
     }
 }

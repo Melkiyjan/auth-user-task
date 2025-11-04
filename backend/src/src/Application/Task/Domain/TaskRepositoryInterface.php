@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Task\Domain;
+namespace App\Application\Task\Domain;
 
 use App\Application\Task\Domain\Entity\Task;
 use Symfony\Component\HttpFoundation\Exception\JsonException;
