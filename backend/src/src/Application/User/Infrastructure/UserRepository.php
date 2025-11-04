@@ -1,12 +1,12 @@
 <?php
 
-namespace Infrastructure;
+namespace App\Application\User\Infrastructure;
 
 use App\Application\User\Domain\Entity\User;
 use App\Application\User\Domain\UserRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use DomainException;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class UserRepository extends ServiceEntityRepository implements UserRepositoryInterface
 {

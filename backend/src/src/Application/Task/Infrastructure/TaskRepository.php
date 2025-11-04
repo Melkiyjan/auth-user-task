@@ -1,9 +1,11 @@
 <?php
 
-use Application\Task\Domain\TaskRepositoryInterface;
+namespace App\Application\Task\Infrastructure;
+
 use App\Application\Task\Domain\Entity\Task;
+use App\Application\Task\Domain\TaskRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class TaskRepository extends ServiceEntityRepository implements TaskRepositoryInterface
 {

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends AbstractController
 {
-    public function __construct(private AuthService $authService)
+    public function __construct(private readonly AuthService $authService)
     {
     }
 

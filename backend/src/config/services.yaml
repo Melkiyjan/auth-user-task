@@ -22,3 +22,11 @@ services:
     App\EventListener\IsGrantedEventListener:
         tags:
             - { name: kernel.event_listener, event: kernel.controller, priority: 0 }
+
+    App\Component\Auth\AuthService:
+        arguments:
+            $secretKey: '%env(resolve:JWT_SECRET)%'
+
+    App\Application\User\Domain\UserRepositoryInterface: '@App\Application\User\Infrastructure\UserRepository'
+    App\Application\Task\Domain\TaskRepositoryInterface: '@App\Application\Task\Infrastructure\TaskRepository'
+

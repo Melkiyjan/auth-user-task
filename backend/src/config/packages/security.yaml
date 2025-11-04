@@ -10,6 +10,3 @@ security:
     firewalls:
         main:
             provider: app_user_provider
-
-    access_control:
-        - { path: ^/tasks, roles: ROLE_ADMIN }
