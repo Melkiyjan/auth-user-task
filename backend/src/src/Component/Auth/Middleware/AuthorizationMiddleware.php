@@ -3,6 +3,7 @@
 namespace App\Component\Auth\Middleware;
 
 use App\Component\Auth\AuthService;
+use App\Component\Security\SecurityContext;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,8 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthorizationMiddleware
 {
-    public function __construct(private readonly AuthService $authService)
-    {
+    public function __construct(
+        private readonly AuthService $authService,
+        private readonly SecurityContext $securityContext,
+        private readonly ParameterBagInterface $params,
+    ){
+        $this->publicRoutes = $params->get('public_routes');
     }
 
     /**
@@ -35,7 +40,7 @@ class AuthorizationMiddleware
             return new JsonResponse(['error' => 'Invalid token'], Response::HTTP_UNAUTHORIZED);
         }
 
-        $request->attributes->set('user_data', $userData);
+        $this->securityContext->setUserData($userData);
 
         return null;
     }
@@ -53,6 +58,6 @@ class AuthorizationMiddleware
 
     private function isPublicRoute(Request $request): bool
     {
-        return in_array($request->getPathInfo(), ['/api/login', '/api/register']);
+        return in_array($request->getPathInfo(), $this->publicRoutes);
     }
 }

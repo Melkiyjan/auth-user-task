@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Component\Auth\RoleChecker;
+use App\Component\Security\SecurityContext;
 use Application\Task\Application\Model\TaskModel;
 use Application\Task\Domain\TaskRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,20 +15,19 @@ class TaskController extends AbstractController
 {
     public function __construct(
         private readonly TaskRepositoryInterface $taskRepository,
-        private readonly RoleChecker $roleChecker
+        private readonly SecurityContext $securityContext
     ){
     }
 
-    #[IsGranted('ROLE_ADMIN')]
+    // стандартный метод секъюрити
+    // #[IsGranted('ROLE_ADMIN')]
     public function getTaskList(Request $request): JsonResponse
     {
-        $userData = $request->attributes->get('user_data');
-
-        if (!$userData) {
+        if (!$this->securityContext->getUser()) {
             return $this->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (!$this->roleChecker->isGranted(['ROLE_ADMIN'], $userData->roles)) {
+        if (!$this->securityContext->isGranted(['ROLE_ADMIN'])) {
             return $this->json(['error' => 'Access denied'], Response::HTTP_FORBIDDEN);
         }
 

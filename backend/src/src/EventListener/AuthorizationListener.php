@@ -4,7 +4,6 @@ namespace App\EventListener;
 
 use App\Component\Auth\Middleware\AuthorizationMiddleware;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpFoundation\Response;
 
 class AuthorizationListener
 {
@@ -21,7 +20,7 @@ class AuthorizationListener
         $request = $event->getRequest();
         $response = $this->authMiddleware->handle($request);
 
-        if ($response instanceof Response) {
+        if ($response !== null) {
             $event->setResponse($response);
         }
     }

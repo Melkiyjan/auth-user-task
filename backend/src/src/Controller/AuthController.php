@@ -3,11 +3,12 @@
 namespace App\Controller;
 
 use App\Component\Auth\AuthService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthController
+class AuthController extends AbstractController
 {
     public function __construct(private AuthService $authService)
     {
@@ -28,8 +29,10 @@ class AuthController
             return new JsonResponse(['error' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
         }
 
-        // тут сохраняет токен где нибудь
-
-        return new JsonResponse(['token' => $token]);
+        return $this->json([
+            'token' => $token,
+            'type' => 'JWT',
+            'expires_in' => 3600
+        ]);
     }
 }

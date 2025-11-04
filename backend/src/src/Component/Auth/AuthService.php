@@ -29,7 +29,8 @@ class AuthService
             'iat' => time(),
             'exp' => time() + 3600,
             'email' => $user->getEmail(),
-            'role' => $user->getRole()
+            'role' => $user->getRole(),
+            'user_id' => (string) $user->getId()
         ];
 
         return JWT::encode($payload, $this->secretKey, $this->algorithm);
@@ -42,16 +43,5 @@ class AuthService
         } catch (Exception $exception) {
             return null;
         }
-    }
-
-    private function extractToken(Request $request): ?string
-    {
-        $authorizationHeader = $request->headers->get('Authorization');
-
-        if ($authorizationHeader && preg_match('/Bearer\s+(.*)$/i', $authorizationHeader, $matches)) {
-            return $matches[1];
-        }
-
-        return $request->query->get('token');
     }
 }
