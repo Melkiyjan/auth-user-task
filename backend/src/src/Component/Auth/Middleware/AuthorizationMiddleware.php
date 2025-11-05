@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Component\Auth\Middleware;
 
 use App\Component\Auth\AuthService;
@@ -14,7 +16,7 @@ class AuthorizationMiddleware
     public function __construct(
         private readonly AuthService $authService,
         private readonly SecurityContext $securityContext,
-        /** @var string[] */ private array $publicRoutes = [],
+        /** @var string[] */ private readonly array $publicRoutes = [],
     ){
     }
 
@@ -33,15 +35,14 @@ class AuthorizationMiddleware
         }
 
         $payload = $this->authService->validateToken($token);
-        if (!$payload) {
+        if ($payload === null) {
             return $this->unauthorized('Invalid or expired token');
         }
 
-        if (is_object($payload)) {
-            $payload = json_decode(json_encode($payload), true);
-        }
+        $payload = json_decode(json_encode($payload, JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR);
 
         $this->securityContext->setUserData($payload);
+
         return null;
     }
 
@@ -57,21 +58,25 @@ class AuthorizationMiddleware
     private function extractBearerToken(Request $request): ?string
     {
         $header = $request->headers->get('Authorization', '');
-        if (preg_match('/^\s*Bearer\s+(.+)\s*$/i', $header, $m)) {
+        if (preg_match('/^\s*Bearer\s+(.+)\s*$/i', (string) $header, $m)) {
             return $m[1];
         }
-        return $request->cookies->get('jwt');
+
+        $jwt = $request->cookies->get('jwt');
+
+        return is_string($jwt) ? $jwt : null;
     }
 
     private function isPublicRoute(Request $request): bool
     {
         $path = $request->getPathInfo();
-        foreach ($this->publicRoutes as $pattern) {
-            $regex = '#^' . str_replace('\*', '.*', preg_quote($pattern, '#')) . '$#';
+        foreach ($this->publicRoutes as $publicRoute) {
+            $regex = '#^' . str_replace('\*', '.*', preg_quote($publicRoute, '#')) . '$#';
             if (preg_match($regex, $path)) {
                 return true;
             }
         }
+
         return false;
     }
 }

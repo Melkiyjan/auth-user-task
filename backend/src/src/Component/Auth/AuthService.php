@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Component\Auth;
 
+use App\Application\User\Domain\Entity\User;
 use App\Application\User\Domain\UserRepositoryInterface;
 use Exception;
 use Firebase\JWT\JWT;
@@ -40,7 +43,7 @@ class AuthService
     {
         try {
             return JWT::decode($token, new Key($this->secretKey, $this->algorithm));
-        } catch (Exception $exception) {
+        } catch (Exception) {
             return null;
         }
     }

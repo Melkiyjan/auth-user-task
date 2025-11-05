@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Task\Application\Model;
 
 use App\Application\Task\Domain\Entity\Task;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\EventListener;
 
 use App\Attribute\IsGranted as IsGrantedAttribute;
@@ -16,42 +18,35 @@ class IsGrantedEventListener
     {
     }
 
-    public function onKernelController(ControllerEvent $event): void
+    public function onKernelController(ControllerEvent $controllerEvent): void
     {
-        $controller = $event->getController();
+        $controller = $controllerEvent->getController();
         if (!is_array($controller)) {
             return;
         }
 
-        $refMethod = new ReflectionMethod($controller[0], $controller[1]);
+        $reflectionMethod = new ReflectionMethod($controller[0], $controller[1]);
         $attributes = array_merge(
-            $refMethod->getAttributes(IsGrantedAttribute::class),
+            $reflectionMethod->getAttributes(IsGrantedAttribute::class),
             (new ReflectionClass($controller[0]))->getAttributes(IsGrantedAttribute::class)
         );
 
-        if (!$attributes) {
+        if ($attributes === []) {
             return;
         }
-        foreach ($attributes as $attr) {
+
+        foreach ($attributes as $attribute) {
             /** @var IsGrantedAttribute $meta */
-            $meta = $attr->newInstance();
+            $meta = $attribute->newInstance();
             $required = $meta->roles ?? [];
             if (!$this->securityContext->isGranted($required)) {
-                $event->setController(function () {
-                    return new JsonResponse(
-                        ['error' => 'Forbidden'],
-                        Response::HTTP_FORBIDDEN
-                    );
-                });
+                $controllerEvent->setController(fn(): JsonResponse => new JsonResponse(
+                    ['error' => 'Forbidden'],
+                    Response::HTTP_FORBIDDEN
+                ));
 
                 return;
             }
         }
-    }
-
-    private function checkPermission(string $permission): bool
-    {
-        // Заглушка для будущей реализации
-        return true;
     }
 }

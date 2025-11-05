@@ -1,17 +1,27 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Component\Security;
 
+use App\Application\User\Domain\Entity\User;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-final class SecurityContext
+final readonly class SecurityContext
 {
-    public function __construct(private readonly RequestStack $requestStack) {}
+    public function __construct(private RequestStack $requestStack) {}
 
+    /**
+     * @param string[] $payload
+     */
     public function setUserData(array $payload): void
     {
         $this->requestStack->getCurrentRequest()?->attributes->set('_auth_user', $payload);
     }
 
+    /**
+     * @return string[]|null
+     */
     public function getUser(): ?array
     {
         return $this->requestStack->getCurrentRequest()?->attributes->get('_auth_user');
@@ -26,11 +36,9 @@ final class SecurityContext
         if (!$user) {
             return false;
         }
-        $userRoles = (array)($user['roles'] ?? $user['role'] ?? []);
 
-        if (is_string($userRoles)) {
-            $userRoles = [$userRoles];
-        }
-        return !array_diff($roles, $userRoles);
+        $userRole = $user['role'] ?? User::ROLE_USER;
+
+        return in_array($userRole, $roles, true);
     }
 }

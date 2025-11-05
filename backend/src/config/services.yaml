@@ -6,6 +6,12 @@ parameters:
         - '/api/public/*'
 
 services:
+#    ректор и php stan
+#    все сервисы - в атрибутах -
+#    аction domain response -
+#    докер в отдельную папочку -
+
+
     _defaults:
         autowire: true
         autoconfigure: true

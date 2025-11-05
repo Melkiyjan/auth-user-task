@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\User\Domain\Entity;
 
 use App\Application\Task\Domain\Entity\Task;
@@ -14,6 +16,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     public const string ROLE_USER = 'ROLE_USER';
+
     public const string ROLE_ADMIN = 'ROLE_ADMIN';
 
     #[ORM\Id]

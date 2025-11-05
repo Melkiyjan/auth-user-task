@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Component\Security\SecurityContext;
@@ -16,8 +18,7 @@ use App\Attribute\IsGranted;
 class TaskController extends AbstractController
 {
     public function __construct(
-        private readonly TaskRepositoryInterface $taskRepository,
-        private readonly SecurityContext $securityContext
+        private readonly TaskRepositoryInterface $taskRepository
     )
     {
     }

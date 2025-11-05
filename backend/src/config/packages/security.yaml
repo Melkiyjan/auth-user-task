@@ -1,5 +1,4 @@
 security:
-    enable_authenticator_manager: true
     password_hashers:
         App\Application\User\Domain\Entity\User: 'auto'
     providers:

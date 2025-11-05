@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\Task\Domain\Entity;
 
 use App\Application\User\Domain\Entity\User;
@@ -67,4 +69,3 @@ class Task
         return $this;
     }
 }
-
