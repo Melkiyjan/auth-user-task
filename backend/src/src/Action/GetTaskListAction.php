@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Action;
 
 use App\Application\Task\Domain\TaskRepositoryInterface;
@@ -14,10 +16,9 @@ final readonly class GetTaskListAction
         private TaskRepositoryInterface $taskRepository
     ) {
     }
-    public function __invoke()
+    public function __invoke(): array
     {
         // я бы сюда подключил пагинатор
         return $this->taskRepository->findBy([]);
     }
-
 }

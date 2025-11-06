@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
-use Symfony\Component\HttpFoundation\Response;
 use App\Component\Auth\Middleware\AuthorizationMiddleware;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
-class AuthorizationListener
+#[AsEventListener]
+final class AuthorizationListener
 {
     public function __construct(private readonly AuthorizationMiddleware $authorizationMiddleware)
     {

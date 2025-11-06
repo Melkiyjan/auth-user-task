@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Application\User\Infrastructure;
 
-use JsonException;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Override;
 use App\Application\User\Domain\Entity\User;
 use App\Application\User\Domain\UserRepositoryInterface;
-use DomainException;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use DomainException;
+use JsonException;
+use Override;
 
 /**
  * @extends ServiceEntityRepository<User>

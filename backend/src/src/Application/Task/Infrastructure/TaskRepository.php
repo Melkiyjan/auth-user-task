@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Application\Task\Infrastructure;
 
-use DomainException;
-use Override;
 use App\Application\Task\Domain\Entity\Task;
 use App\Application\Task\Domain\TaskRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use DomainException;
+use Override;
 
 /**
  * @extends ServiceEntityRepository<Task>

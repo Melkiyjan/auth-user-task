@@ -8,10 +8,12 @@ use App\Attribute\IsGranted as IsGrantedAttribute;
 use App\Component\Security\SecurityContext;
 use ReflectionClass;
 use ReflectionMethod;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
+#[AsEventListener]
 class IsGrantedEventListener
 {
     public function __construct(private readonly SecurityContext $securityContext)

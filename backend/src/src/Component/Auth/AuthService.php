@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Component\Auth;
 
-use App\Application\User\Domain\Entity\User;
 use App\Application\User\Domain\UserRepositoryInterface;
 use Exception;
 use Firebase\JWT\JWT;
